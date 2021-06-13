@@ -43,6 +43,9 @@ import openfl.display.StageQuality;
 import openfl.filters.ShaderFilter;
 import openfl.Lib;
 import flixel.system.scaleModes.FixedScaleMode;
+#if mobileC
+import ui.Mobilecontrols;
+#end
 
 using StringTools;
 
@@ -54,7 +57,9 @@ class PlayState extends MusicBeatState
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
-
+	#if mobileC
+	var mcontrols:Mobilecontrols; 
+	#end
 	public static var misses:Int = 0;
 	public static var maxc:Int = 0;
 
@@ -790,6 +795,28 @@ class PlayState extends MusicBeatState
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 
 		FlxG.fixedTimestep = false;
+		#if mobileC
+		mcontrols = new Mobilecontrols();
+		switch (mcontrols.mode)
+		{
+			case VIRTUALPAD_RIGHT | VIRTUALPAD_LEFT | VIRTUALPAD_CUSTOM:
+				controls.setVirtualPad(mcontrols._virtualPad, FULL, NONE);
+			case HITBOX:
+				controls.setHitBox(mcontrols._hitbox);
+			default:
+		}
+		trackedinputs = controls.trackedinputs;
+		controls.trackedinputs = [];
+
+		var camcontrol = new FlxCamera();
+		FlxG.cameras.add(camcontrol);
+		camcontrol.bgColor.alpha = 0;
+		mcontrols.cameras = [camcontrol];
+
+		mcontrols.visible = false;
+
+		add(mcontrols);
+		#end
 
 		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
 		healthBarBG.screenCenter(X);
@@ -1016,7 +1043,9 @@ class PlayState extends MusicBeatState
 	function startCountdown():Void
 	{
 		inCutscene = false;
-
+		#if mobileC
+		mcontrols.visible = true;
+		#end
 		generateStaticArrows(0);
 		generateStaticArrows(1);
 
