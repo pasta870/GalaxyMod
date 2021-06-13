@@ -14,6 +14,7 @@ using StringTools;
 
 class DialogueBox extends FlxSpriteGroup
 {
+    var screenJustTouched:Bool = false;
 	var box:FlxSprite;
 
 	var curCharacter:String = '';
@@ -212,7 +213,17 @@ class DialogueBox extends FlxSpriteGroup
 			dialogueStarted = true;
 		}
 
-		if (FlxG.keys.justPressed.ANY  && dialogueStarted == true)
+//crap 4
+        for (touch in FlxG.touches.list)
+		{
+			screenJustTouched = false;
+			
+			if (touch.justReleased){
+				screenJustTouched = true;
+			}
+		}
+
+		if (FlxG.keys.justPressed.ANY || screenJustTouched && dialogueStarted == true)
 		{
 			remove(dialogue);
 				
