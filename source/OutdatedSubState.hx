@@ -20,11 +20,14 @@ class OutdatedSubState extends MusicBeatState
 		var txt:FlxText = new FlxText(0, 0, FlxG.width,
 			"-SEISZURE WARNING-\n\n"
 			+ "This mod of FNF may contain lots of stuff\n that will make you insane,\nif you feel uncomfortable, please stop the game\nimmediately."
-			+"\n\n(Press Enter to skip this page)",
+			+"\n\n(Press A to skip this page)",
 			32);
 		txt.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
 		txt.screenCenter();
 		add(txt);
+		#if mobileC
+		addVirtualPad(NONE, A);
+		#end
 	}
 
 	override function update(elapsed:Float)
